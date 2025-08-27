@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Accueil{% endblock %}
+<body class="bg-light">
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow rounded-3">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Ajouter un projet</h4>
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" value="{% if form.instance.pk %}Modifier{% else %}Ajouter{% endif %}" class="btn btn-success mt-3">Enregistrer</button>
+                <a href="{% url 'projet_create' %}" class="btn btn-secondary mt-3">Annuler</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+{% endblock %}

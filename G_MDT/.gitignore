@@ -1,0 +1,39 @@
+# Fichiers Python compilés
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Environnement virtuel
+venv/
+env/
+ENV/
+*.env
+
+# Base de données SQLite
+db.sqlite3
+
+# Fichiers de logs
+*.log
+
+# Migrations (si tu ne veux pas les versionner)
+*/migrations/*
+!*/migrations/__init__.py
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Fichiers de configuration secrets
+*.env
+secrets.json
+
+# Media & static générés
+/media/
+staticfiles/
+
+# PyCharm / VSCode / IDE
+.idea/
+.vscode/
+
+# Cache
+*.egg-info/
