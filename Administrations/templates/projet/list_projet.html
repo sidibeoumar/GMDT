@@ -24,15 +24,37 @@
                 <td>{{ projet.nom }}</td>
                 <td>{{ projet.description }}</td>
                 <td>
-                    <a href="">
+                    <a href="{% url 'edit_projet' projet.pk %}">
                         <i class="bi bi-pencil-square"></i>
                     </a>
                 </td>
                 <td>
-                    <a href="">
+                     <a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ projet.id }}">
                         <i class="bi bi-trash"></i>
                     </a>
                 </td>
+                <div class="modal fade" id="deleteModal{{ projet.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ projet.id }}" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                        <div class="modal-header bg-danger text-white">
+                            <h5 class="modal-title" id="deleteModalLabel{{ projet.id }}">Confirmation de suppression</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                        </div>
+                        <div class="modal-body">
+                            ⚠️ Êtes-vous sûr de vouloir supprimer <strong>{{ projet.nom }}</strong> ?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+
+                            <!-- Formulaire POST qui appelle ta vue -->
+                            <form method="POST" action="{% url 'delete_projet' projet.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Supprimer</button>
+                            </form>
+                        </div>
+                        </div>
+                    </div>
+                </div>
             </tr>
             {% empty %}
             <tr>
@@ -42,4 +64,5 @@
         </tbody>
     </table>
 </div>
+
 {% endblock %}

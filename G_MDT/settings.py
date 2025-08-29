@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+    'Accounts',
     'Users',
     'Administrations',
 ]
@@ -78,6 +78,9 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'G_MDT.wsgi.application'
+
+
+AUTH_USER_MODEL = 'Accounts.User'
 
 
 # Database

@@ -31,4 +31,21 @@ def delete_projet(request, pk):
             return redirect('list_projet')
         return render(request, 'projet/')
 
+def edit_projet(request, pk):
+    projet = Projet.objects.get(pk=pk)
+    form = Projetform(instance=projet)
+    if request.method == 'POST':
+        form = Projetform(request.POST, instance=projet)
+        if form.is_valid():
+            form.save()
+        return redirect('list_projet')
+    return render(request, 'projet/projet_create.html', {'form':form})
+
+def delete_projet(request, pk):
+    projet = Projet.objects.get(pk=pk)
+    if request.method == 'POST':
+        projet.delete()
+        return redirect(list_projet)
+    return render(request, 'projet/list_projet.html', {'projet':projet})
+    
             

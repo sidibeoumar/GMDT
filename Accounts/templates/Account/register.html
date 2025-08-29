@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card shadow border-0 rounded-3">
+      <div class="card-header bg-dark text-white text-center">
+        <h4><i class="bi bi-person-plus-fill"></i> Faite une Demande</h4>
+      </div>
+      <div class="card-body">
+        <form method="POST" enctype="multipart/form-data" novalidate>
+          {% csrf_token %}
+
+          <!-- erreurs globales -->
+          {% if form.non_field_errors %}
+            <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+          {% endif %}
+
+          <div class="row g-3">
+            {% for field in form %}
+              <div class="col-md-6">
+                <label class="form-label required-label">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                  <div class="text-danger small">{{ field.errors|striptags }}</div>
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+
+          <div class="d-grid mt-4">
+            <button type="submit" class="btn btn-dark btn-lg">
+              <i class="bi bi-check-circle"></i> S’inscrire
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Étoile rouge pour champs obligatoires */
+  .required-label::after {
+    content: " *";
+    color: red;
+    font-weight: bold;
+  }
+</style>
+{% endblock %}
