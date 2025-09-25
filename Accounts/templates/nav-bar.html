@@ -1,0 +1,188 @@
+<!-- {% load static %} -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Bienvenue G_STAGE{% endblock %}</title>
+
+    <!-- Bootstrap 5 & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <style>
+        /* === Navbar style NiceAdmin === */
+        .navbar {
+            background-color: #fff !important;
+            border-bottom: 1px solid #e0e0e0;
+            box-shadow: 0 2px 4px rgba(0,0,0,.05);
+        }
+        .navbar .nav-link, 
+        .navbar .navbar-brand {
+            color: #012970 !important;
+            font-weight: 500;
+        }
+        .navbar .nav-link:hover {
+            color: #0d6efd !important;
+        }
+
+        /* === Sidebar style === */
+        #sidebar {
+            width: 250px;
+            background: #f8f9fa;
+            color: #012970;
+            position: fixed;
+            top: 56px;
+            bottom: 0;
+            left: 0;
+            overflow-y: auto;
+            padding-top: 1rem;
+            border-right: 1px solid #e0e0e0;
+            transition: 0.3s;
+        }
+        #sidebar .nav-link {
+            color: #012970;
+            padding: 10px 15px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+        }
+        #sidebar .nav-link i {
+            font-size: 1.1rem;
+        }
+        #sidebar .nav-link:hover {
+            background: #e7f1ff;
+            color: #0d6efd;
+        }
+        #sidebar .nav-link.collapsed {
+            color: #012970;
+        }
+        #sidebar .nav-link.collapsed:hover {
+            color: #0d6efd;
+        }
+        #sidebar .nav-content a {
+            font-size: 0.95rem;
+            padding-left: 35px;
+            color: #444;
+        }
+        #sidebar .nav-content a:hover {
+            color: #0d6efd;
+        }
+
+        /* === Main Content === */
+        #main-content {
+            margin-left: 250px;
+            padding: 1rem;
+            margin-top: 56px;
+            transition: 0.3s;
+            background: #f6f9ff;
+            min-height: 100vh;
+        }
+        #main-content.full { margin-left: 0; }
+
+        /* === Footer === */
+        footer {
+            background: #fff;
+            border-top: 1px solid #e0e0e0;
+            color: #666;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            #sidebar { margin-left: -250px; }
+            #sidebar.show { margin-left: 0; }
+            #main-content { margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container-fluid">
+            <button class="btn btn-light d-lg-none me-2" id="sidebarToggle">
+                <i class="bi bi-list fs-3"></i>
+            </button>
+            <a class="navbar-brand fw-bold" href="{% url 'Accounts:index' %}">G_STAGE</a>
+            <div class="collapse navbar-collapse justify-content-end">
+                <ul class="navbar-nav mb-2 mb-lg-0">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle me-1"></i> Profil
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                            {% if user.is_authenticated %}
+                                <li><a class="dropdown-item" href="#">{{ user.username }}</a></li>
+                                <li><a class="dropdown-item" href="{% url 'Accounts:logout_user' %}">Se déconnecter</a></li>
+                            {% else %}
+                                <li><a class="dropdown-item" href="{% url 'Accounts:login_user' %}">Se connecter</a></li>
+                                <li><a class="dropdown-item" href="#">S’inscrire</a></li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar">
+        <ul class="sidebar-nav" id="sidebar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'Accounts:index' %}"><i class="bi bi-speedometer2"></i> Tableau de Bord</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#forms-nav">
+                    <span><i class="bi bi-journal-plus"></i> Configuration</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="forms-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                    <li><a class="nav-link" href="{% url 'Administrations:create_periode' %}"><i class="bi bi-calendar-plus"></i> Ajouter période</a></li>
+                    <li><a class="nav-link" href="{% url 'Administrations:projet_create' %}"><i class="bi bi-folder-plus"></i> Ajouter projet</a></li>
+                    <li><a class="nav-link" href="{% url 'Accounts:create_encadreur' %}"><i class="bi bi-person-plus"></i> Ajouter encadreur</a></li>
+                    <li><a class="nav-link" href="#"><i class="bi bi-file-earmark-plus"></i> Ajouter rapport</a></li>
+                    <li><a class="nav-link" href="{% url 'Administrations:create_stage' %}"><i class="bi bi-briefcase-plus me-2"></i> Ajouter stage</a></li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#tables-nav">
+                    <span><i class="bi bi-table"></i> Tables</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="tables-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                    <li><a class="nav-link" href="{% url 'Administrations:list_projet' %}"><i class="bi bi-tags"></i> Thèmes</a></li>
+                    <li><a class="nav-link" href="{% url 'Accounts:list_encadeur' %}"><i class="bi bi-people"></i> Encadreurs</a></li>
+                    <li><a class="nav-link" href="#"><i class="bi bi-file-text"></i> Rapports</a></li>
+                    <li><a class="nav-link" href="{% url 'Administrations:stage_list' %}"><i class="bi bi-briefcase"></i> Stages</a></li>
+                    <li><a class="nav-link" href="{% url 'Accounts:stage_valid' %}"><i class="bi bi-check-circle"></i> Stages Validés</a></li>
+                    <li><a class="nav-link" href="#"><i class="bi bi-x-circle"></i> Stages Rejetés</a></li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#"><i class="bi bi-envelope"></i> Contact</a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main id="main-content">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-3 mt-5">
+        <p class="mb-0">© {{ now|date:"Y" }} - G_STAGE</p>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const toggleBtn = document.getElementById('sidebarToggle');
+
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('show');
+        });
+    </script>
+</body>
+</html>

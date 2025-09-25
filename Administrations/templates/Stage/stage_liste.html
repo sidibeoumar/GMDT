@@ -11,32 +11,32 @@
             <thead class="table-dark">
                 <tr>
                     <th>ID</th>
-                    <th>Nom</th>
-                    <th>Description</th>
-                    <th>Modifier</th>
-                    <th>Supprimer</th>
+                    <th>Projet</th>
+                    <th>Periode</th>
+                    <th colspan="2">Action</th>
+                    
                 </tr>
             </thead>
             <tbody>
-                {% for projet in projets %}
+                {% for stage in Stages %}
                 <tr>
-                    <td>{{ projet.id }}</td>
-                    <td>{{ projet.nom }}</td>
-                    <td>{{ projet.description }}</td>
+                    <td>{{ stage.id }}</td>
+                    <td>{{ stage.projet }}</td>
+                    <td>{{ stage.periode }}</td>
                     <td>
-                        <a href="{% url 'Administrations:edit_projet' projet.pk %}" class="text-decoration-none">
+                        <a href="{% url 'Administrations:stage_edit' stage.pk %}" class="text-decoration-none">
                             <i class="bi bi-pencil-square fs-5"></i>
                         </a>
                     </td>
                     <td>
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ projet.id }}">
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ stage.id }}">
                             <i class="bi bi-trash fs-5 text-danger"></i>
                         </a>
                     </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="5" class="text-center">Aucun projet trouvé</td>
+                    <td colspan="5" class="text-center">Aucun Stage trouvé</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -44,20 +44,20 @@
     </div>
 
     <!-- Modals -->
-    {% for projet in projets %}
-    <div class="modal fade" id="deleteModal{{ projet.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ projet.id }}" aria-hidden="true">
+    {% for stage in Stages %}
+    <div class="modal fade" id="deleteModal{{ stage.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ stage.id }}" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title" id="deleteModalLabel{{ projet.id }}">Confirmation de suppression</h5>
+                    <h5 class="modal-title" id="deleteModalLabel{{ stage.id }}">Confirmation de suppression</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fermer"></button>
                 </div>
                 <div class="modal-body">
-                    ⚠️ Êtes-vous sûr de vouloir supprimer <strong>{{ projet.nom }}</strong> ?
+                    ⚠️ Êtes-vous sûr de vouloir supprimer <strong>{{ stage.projet }}</strong> ?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                    <form method="POST" action="{% url 'Administrations:delete_projet' projet.id %}">
+                    <form method="POST" action="{% url 'Administrations:stage_delete' projet.id %}">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-danger">Supprimer</button>
                     </form>

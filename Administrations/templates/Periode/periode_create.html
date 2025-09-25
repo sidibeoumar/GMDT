@@ -1,0 +1,73 @@
+{% extends "nav-bar.html" %}
+{% load static %}
+
+{% block title %}Ajouter une Période{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="col-lg-6 col-md-8">
+        <div class="card shadow-lg border-0 rounded-4">
+            <!-- Header -->
+            <div class="card-header bg-dark text-white text-center py-3">
+                    <h4 class="mb-0">
+                        <i class="bi bi-calendar-plus me-2"></i>
+                        {% if form.instance.pk %}
+                            Modifier la Periode
+                        {% else %}
+                            Ajouter une Periode
+                        {% endif %}
+                    </h4>
+                </div>
+
+            <!-- Body -->
+            <div class="card-body p-4">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+
+                    <!-- Date début -->
+                    <div class="mb-4">
+                        <label for="id_date_debut" class="form-label fw-bold">Date de Début</label>
+                        {{ form.date_debut }}
+                        {% if form.date_debut.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ form.date_debut.errors|striptags }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Date fin -->
+                    <div class="mb-4">
+                        <label for="id_date_fin" class="form-label fw-bold">Date de Fin</label>
+                        {{ form.date_fin }}
+                        {% if form.date_fin.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ form.date_fin.errors|striptags }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Submit -->
+                      <!-- Bouton submit dynamique -->
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-dark btn-lg rounded-pill px-5">
+                                <i class="bi bi-save me-2"></i>
+                                {% if form.instance.pk %}
+                                    Modifier
+                                {% else %}
+                                    Enregistrer
+                                {% endif %}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Message d’information -->
+        <div class="alert alert-info mt-3 text-center shadow-sm rounded-3">
+            <i class="bi bi-info-circle me-2"></i>
+            Veuillez choisir une période valide (date de fin après date de début).
+        </div>
+    </div>
+</div>
+{% endblock %}

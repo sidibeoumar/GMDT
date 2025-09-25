@@ -1,0 +1,103 @@
+{% extends "nav-bar.html" %}
+{% block title %}Tableau de Bord - G_STAGE{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        Stage <span class="text-muted small">| Validés</span>
+                    </h5>
+                    <div class="table-responsive">
+                        <table class="table table-striped align-middle">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nom utilisateur</th>
+                                    <th>Nom</th>
+                                    <th>Prénom</th>
+                                    <th>Email</th>
+                                    <th>Téléphone</th>
+                                    <th>Rôle</th>
+                                    <th>Status</th>
+                                    <th>Document</th>
+                                    <th colspan="2" class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for Stagiaire in stagesvalid %}
+                                <tr>
+                                    <td>{{ Stagiaire.id }}</td>
+                                    <td>
+                                        <a href="#" class="fw-bold text-decoration-none">
+                                            {{ Stagiaire.username }}
+                                        </a>
+                                    </td>
+                                    <td>{{ Stagiaire.first_name }}</td>
+                                    <td>{{ Stagiaire.last_name }}</td>
+                                    <td>{{ Stagiaire.email }}</td>
+                                    <td>{{ Stagiaire.telephone }}</td>
+                                    <td>{{ Stagiaire.role }}</td>
+                                    <td>
+                                        {% if Stagiaire.status == "validé" %}
+                                            <span class="badge bg-success">{{ Stagiaire.status }}</span>
+                                        {% elif Stagiaire.status == "rejeté" %}
+                                            <span class="badge bg-danger">{{ Stagiaire.status }}</span>
+                                        {% else %}
+                                            <span class="badge bg-warning text-dark">{{ Stagiaire.status }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if Stagiaire.cv %}
+                                            <a href="{{ Stagiaire.cv.url }}" class="btn btn-sm btn-outline-primary">
+                                                Télécharger
+                                            </a>
+                                        {% else %}
+                                            <span class="text-muted">Pas de document</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a  
+                                           href="#">
+                                           <i class="bi bi-pencil-square fs-5"></i>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a 
+                                           href="#"
+                                           data-bs-toggle="modal"
+                                           data-bs-target="#confirmRejectModal{{ Stagiaire.id }}">
+                                            <i class="bi bi-trash fs-5 text-danger"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+
+                                <!-- Modal de confirmation pour rejet -->
+                                <div class="modal fade" id="confirmRejectModal{{ Stagiaire.id }}" tabindex="-1" aria-labelledby="confirmRejectLabel{{ Stagiaire.id }}" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header bg-danger text-white">
+                                                <h5 class="modal-title" id="confirmRejectLabel{{ Stagiaire.id }}">Confirmation</h5>
+                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Voulez-vous vraiment rejeter la demande de <strong>{{ Stagiaire.first_name }} {{ Stagiaire.last_name }}</strong> ?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                                <a href="" class="btn btn-danger">Oui, rejeter</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

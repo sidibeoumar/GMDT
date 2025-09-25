@@ -1,0 +1,65 @@
+{% extends 'nav-bar.html' %}
+{% load static %}
+
+{% block title %}Créer un Encadreur{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-6 col-md-8 col-sm-10">
+    <div class="card shadow border-0 rounded-4">
+      <div class="card-header bg-dark text-white text-center py-3">
+        <h4 class="mb-0"><i class="bi bi-person-plus-fill me-2"></i>Créer un Encadreur</h4>
+      </div>
+      <div class="card-body p-4">
+
+        <!-- ✅ Affichage des messages Django (succès, erreurs globales) -->
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+          {% endfor %}
+        {% endif %}
+
+        <!-- ✅ Affichage des erreurs globales (comme mot de passe non identique) -->
+        {% if form.non_field_errors %}
+          <div class="alert alert-danger">
+            {% for error in form.non_field_errors %}
+              <p class="mb-0">{{ error }}</p>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        <!-- ✅ Formulaire -->
+        <form method="post" enctype="multipart/form-data" novalidate>
+          {% csrf_token %}
+
+          {% for field in form %}
+            <div class="mb-3">
+              <label class="form-label">{{ field.label }}</label>
+              {{ field }}
+
+              <!-- ✅ Affichage des erreurs spécifiques à un champ -->
+              {% if field.errors %}
+                <div class="text-danger small mt-1">
+                  {% for error in field.errors %}
+                    <i class="bi bi-exclamation-triangle-fill"></i> {{ error }}
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+          {% endfor %}
+
+          <div class="text-center">
+            <button type="submit" class="btn btn-dark btn-lg">
+              <i class="bi bi-check-circle"></i> Créer l’encadreur
+            </button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

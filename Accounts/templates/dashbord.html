@@ -1,0 +1,186 @@
+{% extends "nav-bar.html" %}
+{% block title %}Tableau de Bord - G_STAGE{% endblock %}
+
+{% block content %}
+<div class="pagetitle mb-4">
+    <h1 class="fw-bold" style="color:#012970;">Tableau de Bord</h1>
+</div>
+
+<section class="section dashboard" style="background-color:#f6f9ff;">
+    <div class="row g-4">
+
+        <!-- Cards -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card shadow-sm border-0 rounded-3" style="background:#fff;">
+                <div class="card-body">
+                    <h5 class="card-title text-uppercase" style="color:#899bbd;">Stages | Aujourd'hui</h5>
+                    <div class="d-flex align-items-center">
+                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center bg-primary text-white">
+                            <i class="bi bi-cart"></i>
+                        </div>
+                        <div class="ps-3">
+                            <h6 class="fw-bold" style="color:#012970;">{{ demandes_count }}</h6>
+                            <span class="text-muted small">Demandes reçues</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+            <div class="card shadow-sm border-0 rounded-3" style="background:#fff;">
+                <div class="card-body">
+                    <h5 class="card-title text-uppercase" style="color:#899bbd;">Stages validés | Mois</h5>
+                    <div class="d-flex align-items-center">
+                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center bg-success text-white">
+                            <i class="bi bi-check-circle"></i>
+                        </div>
+                        <div class="ps-3">
+                            <h6 class="fw-bold" style="color:#012970;">{{ valide_count }}</h6>
+                            <span class="text-muted small">Validés</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-12">
+            <div class="card shadow-sm border-0 rounded-3" style="background:#fff;">
+                <div class="card-body">
+                    <h5 class="card-title text-uppercase" style="color:#899bbd;">Stagiaires | Année</h5>
+                    <div class="d-flex align-items-center">
+                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center bg-warning text-white">
+                            <i class="bi bi-people"></i>
+                        </div>
+                        <div class="ps-3">
+                            <h6 class="fw-bold" style="color:#012970;">1244</h6>
+                            <span class="text-muted small">Terminés</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table Demandes -->
+        <div class="col-12">
+            <div class="card shadow-sm border-0 rounded-3" style="background:#fff;">
+                <div class="card-body">
+                    <h5 class="card-title" style="color:#012970;">Demandes <span class="text-muted small">| En cours</span></h5>
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead style="background:#012970; color:#fff;">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nom utilisateur</th>
+                                    <th>Nom</th>
+                                    <th>Prénom</th>
+                                    <th>Email</th>
+                                    <th>Téléphone</th>
+                                    <th>Rôle</th>
+                                    <th>Status</th>
+                                    <th>Document</th>
+                                    <th colspan="2">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for Stagiaire in stagaires %}
+                                <tr>
+                                    <td>{{ Stagiaire.id }}</td>
+                                    <td><span class="fw-bold" style="color:#012970;">{{ Stagiaire.username }}</span></td>
+                                    <td>{{ Stagiaire.first_name }}</td>
+                                    <td>{{ Stagiaire.last_name }}</td>
+                                    <td>{{ Stagiaire.email }}</td>
+                                    <td>{{ Stagiaire.telephone }}</td>
+                                    <td>{{ Stagiaire.role }}</td>
+                                    <td>{{ Stagiaire.status }}</td>
+                                    <td>
+                                        {% if Stagiaire.cv %}
+                                            <a href="{{ Stagiaire.cv.url }}" class="btn btn-sm btn-outline-primary rounded-3">Télécharger</a>
+                                        {% else %}
+                                            <span class="text-muted small">Pas de document</span>
+                                        {% endif %}
+                                    </td>
+                                    <td><a class="badge bg-success text-decoration-none" href="{% url 'Accounts:stage_validation' Stagiaire.pk %}">Accepter</a></td>
+                                    <td><a class="badge bg-danger text-decoration-none" href="#" data-bs-toggle="modal" data-bs-target="#confirmRejectModal{{ Stagiaire.id }}">Rejeter</a></td>
+                                </tr>
+
+                                <!-- Modal Rejet -->
+                                <div class="modal fade" id="confirmRejectModal{{ Stagiaire.id }}" tabindex="-1">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content border-0 shadow-lg rounded-4">
+                                            <div class="modal-header bg-danger text-white">
+                                                <h5 class="modal-title">Confirmation de rejet</h5>
+                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                ⚠️ Voulez-vous vraiment <strong>supprimer</strong> le compte de <b>{{ Stagiaire.username }}</b> ?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary rounded-3" data-bs-dismiss="modal">Annuler</button>
+                                                <a href="{% url 'Accounts:reject_user_demande' Stagiaire.id %}" class="btn btn-danger rounded-3">Oui, rejeter</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table Période -->
+        <div class="col-12">
+            <div class="card shadow-sm border-0 rounded-3" style="background:#fff;">
+                <div class="card-body">
+                    <h5 class="card-title" style="color:#012970;">Période de stage <span class="text-muted small">| Liste</span></h5>
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead style="background:#012970; color:#fff;">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Début</th>
+                                    <th>Fin</th>
+                                    <th colspan="2">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for periode in periodes %}
+                                <tr>
+                                    <td>{{ periode.id }}</td>
+                                    <td>{{ periode.date_debut }}</td>
+                                    <td>{{ periode.date_fin }}</td>
+                                    <td><a href="{% url 'Administrations:edit_periode' periode.pk %}"><i class="bi bi-pencil-square fs-5" style="color:#012970;"></i></a></td>
+                                    <td><a href="#" data-bs-toggle="modal" data-bs-target="#confirmRejectModal{{ periode.id }}"><i class="bi bi-trash fs-5 text-danger"></i></a></td>
+                                </tr>
+
+                                <!-- Modal Suppression -->
+                                <div class="modal fade" id="confirmRejectModal{{ periode.id }}" tabindex="-1">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content border-0 shadow-lg rounded-4">
+                                            <div class="modal-header bg-danger text-white">
+                                                <h5 class="modal-title">Confirmation de suppression</h5>
+                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                ⚠️ Voulez-vous vraiment <strong>supprimer</strong> la période <b>{{ periode.date_debut }}</b> — <b>{{ periode.date_fin }}</b> ?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary rounded-3" data-bs-dismiss="modal">Annuler</button>
+                                                <a href="{% url 'Administrations:delete_periode' periode.id %}" class="btn btn-danger rounded-3">Oui, supprimer</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+{% endblock %}

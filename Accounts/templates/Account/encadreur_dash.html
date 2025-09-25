@@ -1,0 +1,123 @@
+{% extends "nav-bar-encadreur.html" %}
+{% block title %}Tableau de Bord - Encadreur{% endblock %}
+
+{% block content %}
+<div class="pagetitle mb-4">
+    <h1 class="fw-bold" style="color:#012970;">Tableau de Bord Encadreur</h1>
+</div>
+
+<section class="section dashboard" style="background-color:#f6f9ff;">
+    <div class="row g-4">
+
+        <!-- Card Stagiaires -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card shadow-sm border-0 rounded-3" style="background:#fff;">
+                <div class="card-body">
+                    <h5 class="card-title text-uppercase" style="color:#899bbd;">Mes Stagiaires</h5>
+                    <div class="d-flex align-items-center">
+                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center bg-primary text-white">
+                            <i class="bi bi-people"></i>
+                        </div>
+                        <div class="ps-3">
+                            <h6 class="fw-bold" style="color:#012970;">{{ stagiaires_count }}</h6>
+                            <span class="text-muted small">stagiaires affectés</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Rapports -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card shadow-sm border-0 rounded-3" style="background:#fff;">
+                <div class="card-body">
+                    <h5 class="card-title text-uppercase" style="color:#899bbd;">Rapports soumis</h5>
+                    <div class="d-flex align-items-center">
+                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center bg-warning text-white">
+                            <i class="bi bi-file-earmark-text"></i>
+                        </div>
+                        <div class="ps-3">
+                            <h6 class="fw-bold" style="color:#012970;">{{ rapports_count }}</h6>
+                            <span class="text-muted small">rapports reçus</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Rapports validés -->
+        <div class="col-lg-4 col-md-12">
+            <div class="card shadow-sm border-0 rounded-3" style="background:#fff;">
+                <div class="card-body">
+                    <h5 class="card-title text-uppercase" style="color:#899bbd;">Rapports validés</h5>
+                    <div class="d-flex align-items-center">
+                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center bg-success text-white">
+                            <i class="bi bi-check-circle"></i>
+                        </div>
+                        <div class="ps-3">
+                            <h6 class="fw-bold" style="color:#012970;">{{ rapports_valides }}</h6>
+                            <span class="text-muted small">validés</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table Stagiaires -->
+        <div class="col-12">
+            <div class="card shadow-sm border-0 rounded-3" style="background:#fff;">
+                <div class="card-body">
+                    <h5 class="card-title" style="color:#012970;">Mes Stagiaires</h5>
+                    <div class="table-responsive">
+                        <table class="table table-striped align-middle">
+                            <thead style="background:#012970; color:#fff;">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nom</th>
+                                    <th>Prénom</th>
+                                    <th>Email</th>
+                                    <th>Téléphone</th>
+                                    <th>Domaine</th>
+                                    <th>Stage</th>
+                                    <th>Rapports</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for stagiaire in stagiaires %}
+                                <tr>
+                                    <td>{{ stagiaire.id }}</td>
+                                    <td>{{ stagiaire.last_name }}</td>
+                                    <td>{{ stagiaire.first_name }}</td>
+                                    <td>{{ stagiaire.email }}</td>
+                                    <td>{{ stagiaire.telephone }}</td>
+                                    <td>{{ stagiaire.domaine_etude }}</td>
+                                    <td>
+                                        {% if stagiaire.stage %}
+                                            {{ stagiaire.stage.projet }}
+                                        {% else %}
+                                            <span class="text-muted small">Pas de stage affecté</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if stagiaire.stage and stagiaire.stage.rapport_stage %}
+                                            {{ stagiaire.stage.rapport_stage }}
+                                        {% else %}
+                                            <span class="text-muted small">Pas de rapport</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="8" class="text-center text-muted">Aucun stagiaire affecté</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+{% endblock %}

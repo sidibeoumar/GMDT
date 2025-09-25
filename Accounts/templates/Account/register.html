@@ -1,19 +1,20 @@
 {% extends "base.html" %}
 
 {% block title %}Accueil{% endblock %}
+{% load widget_tweaks %}
 
 {% block content %}
-<div class="row justify-content-center">
-  <div class="col-md-8">
-    <div class="card shadow border-0 rounded-3">
-      <div class="card-header bg-dark text-white text-center">
-        <h4><i class="bi bi-person-plus-fill"></i> Faite une Demande</h4>
+<div class="row justify-content-center mt-5">
+  <div class="col-lg-8 col-md-10">
+    <div class="card shadow border-0 rounded-4">
+      <div class="card-header bg-dark text-white text-center py-3">
+        <h4 class="mb-0"><i class="bi bi-person-plus-fill me-2"></i>Faire une Demande</h4>
       </div>
-      <div class="card-body">
+      <div class="card-body p-4">
         <form method="POST" enctype="multipart/form-data" novalidate>
           {% csrf_token %}
 
-          <!-- erreurs globales -->
+          <!-- Erreurs globales -->
           {% if form.non_field_errors %}
             <div class="alert alert-danger">{{ form.non_field_errors }}</div>
           {% endif %}
@@ -22,9 +23,12 @@
             {% for field in form %}
               <div class="col-md-6">
                 <label class="form-label required-label">{{ field.label }}</label>
-                {{ field }}
+                {{ field|add_class:"form-control" }}
+                {% if field.help_text %}
+                  <small class="form-text text-muted">{{ field.help_text }}</small>
+                {% endif %}
                 {% if field.errors %}
-                  <div class="text-danger small">{{ field.errors|striptags }}</div>
+                  <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
                 {% endif %}
               </div>
             {% endfor %}
@@ -32,7 +36,7 @@
 
           <div class="d-grid mt-4">
             <button type="submit" class="btn btn-dark btn-lg">
-              <i class="bi bi-check-circle"></i> S’inscrire
+              <i class="bi bi-check-circle me-2"></i> S’inscrire
             </button>
           </div>
         </form>
@@ -47,6 +51,20 @@
     content: " *";
     color: red;
     font-weight: bold;
+    margin-left: 2px;
+  }
+
+  /* Form input focus et bordure */
+  input.form-control:focus,
+  select.form-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13,110,253,.25);
+  }
+
+  /* Card hover */
+  .card:hover {
+    transform: translateY(-2px);
+    transition: all 0.3s;
   }
 </style>
 {% endblock %}

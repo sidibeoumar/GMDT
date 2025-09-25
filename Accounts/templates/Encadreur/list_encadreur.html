@@ -1,0 +1,76 @@
+{% extends "nav-bar.html" %}
+
+{% block title %}Liste des Encadreurs{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Liste des Encadreurs</h2>
+    
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Nom utilisateur</th>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Email</th>
+                    <th>Rôle</th>
+                    <th>Status</th>
+                    <th colspan="2">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for encadreur in encadreurs %}
+                <tr>
+                    <td>{{ encadreur.id }}</td>
+                    <td>{{ encadreur.username }}</td>
+                    <td>{{ encadreur.first_name }}</td>
+                    <td>{{ encadreur.last_name }}</td>
+                    <td>{{ encadreur.email }}</td>
+                    <td>{{ encadreur.role }}</td>
+                    <td>{{ encadreur.status }}</td>
+                    <td>
+                        <a href="{% url 'Accounts:update_encadreur' encadreur.id  %}" class="text-success">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{% url 'Accounts:delete_encadreur' encadreur.id  %}" class="text-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ encadreur.id }}">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+
+                <!-- Modal Suppression -->
+                <div class="modal fade" id="deleteModal{{ encadreur.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ encadreur.id }}" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header bg-danger text-white">
+                                <h5 class="modal-title" id="deleteModalLabel{{ encadreur.id }}">Confirmation de suppression</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                            </div>
+                            <div class="modal-body">
+                                ⚠️ Êtes-vous sûr de vouloir supprimer <strong>{{ encadreur.username }}</strong> ?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                            
+                                <form method="POST" action="{% url 'Accounts:delete_encadreur' encadreur.pk %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center">Aucun encadreur trouvé</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
